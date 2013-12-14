@@ -1,10 +1,17 @@
-﻿using UnityEngine;
+﻿using Assets.Managers.Selection;
+using UnityEngine;
 using System.Collections;
 
-public class SolarSystemObject : MonoBehaviour {
-	public SolarSystem SolarSystem;
+public class SolarSystemObject : SelectableGameObject {
+	private SolarSystem solarSystem;
 
-	public float AngleToSun;
+
+	public virtual void Awake() {
+		// Retrieve SolarSystem component from parent GameObject
+		var parentTransform = this.transform.parent;
+		var parentGameObject = parentTransform.gameObject;
+		this.solarSystem = parentGameObject.GetComponent<SolarSystem>();
+	}
 
 	public virtual void Start() {
 
@@ -14,7 +21,11 @@ public class SolarSystemObject : MonoBehaviour {
 
 	}
 
+	public virtual float GetDistanceFrom(SolarSystemObject obj) {
+		return Vector3.Distance(obj.transform.position, this.transform.position);
+	}
+
 	public Sun Sun {
-		get { return this.SolarSystem.Sun; }
+		get { return this.solarSystem.Sun; }
 	}
 }

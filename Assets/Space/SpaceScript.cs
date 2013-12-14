@@ -2,14 +2,17 @@
 using System.Collections;
 
 public class SpaceScript : MonoBehaviour {
+	public Material GridMaterial;
 
-	// Use this for initialization
-	void Start () {
-	
+	private SpaceGrid grid;
+
+
+	public void Start () {
+		this.grid = new SpaceGrid(this.GridMaterial);
+		this.grid.ActiveResolution = SpaceGrid.AvailableResolutions.SolarSystem;
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
+	public void Update () {
+		this.grid.Update();
 	}
 }
