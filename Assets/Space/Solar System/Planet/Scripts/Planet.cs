@@ -6,6 +6,8 @@ using UnityEngine;
 using System.Collections;
 using Vectrosity;
 
+// http://scrawkblog.com/2013/04/13/gpu-gems-to-unity-atmospheric-scattering/
+// http://entitycrisis.blogspot.com/2011/01/unity3d-30-planet-shader.html
 public class Planet : SolarSystemObject {
 	private const double Pi2 = Math.PI * 2.0;
 

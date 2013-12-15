@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Camera\CameraControl.cs" />
+    <Compile Include="Assets\Camera\CameraFacing.cs" />
     <Compile Include="Assets\GameSettings.cs" />
     <Compile Include="Assets\Managers\GameEvents\GameEventsManager.cs" />
     <Compile Include="Assets\Managers\GameEvents\KeyboardEventHandler.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Assets\Vectrosity\VectrosityScripts\VisibilityControl.cs" />
     <Compile Include="Assets\Vectrosity\VectrosityScripts\VisibilityControlAlways.cs" />
     <Compile Include="Assets\Vectrosity\VectrosityScripts\VisibilityControlStatic.cs" />
+    <None Include="Assets\Space\Solar System\Planet\Shaders\Planet.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
 </Project>
