@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{DCE0DD77-E653-4944-2E1B-4108DA88E345}</ProjectGuid>
+    <ProjectGuid>{1E99BC5C-68A0-CC97-3348-F503E9721606}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace></RootNamespace>
-    <AssemblyName>Assembly-CSharp</AssemblyName>
+    <AssemblyName>Assembly-UnityScript-firstpass</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectTypeGuids>{84365F2C-1DDE-431A-8C14-179ADC971E4D};{1FAC5C55-277D-4884-94A4-83DBDAF57E56}</ProjectTypeGuids>
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
@@ -48,41 +48,17 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="UnityVS.LD28.UnityScript.Plugins.unityproj">
-      <Project>{1E99BC5C-68A0-CC97-3348-F503E9721606}</Project>
-      <Name>UnityVS.LD28.UnityScript.Plugins</Name>
-    </ProjectReference>
-    <ProjectReference Include="UnityVS.LD28.CSharp.Plugins.csproj">
-      <Project>{76061105-9BEB-D575-8ABA-23B6AF66472D}</Project>
-      <Name>UnityVS.LD28.CSharp.Plugins</Name>
-    </ProjectReference>
+    <Compile Include="Assets\Standard Assets\Scripts\Camera Scripts\MouseOrbit.js" />
+    <Compile Include="Assets\Standard Assets\Scripts\Camera Scripts\SmoothFollow.js" />
+    <Compile Include="Assets\Standard Assets\Scripts\Camera Scripts\SmoothLookAt.js" />
+    <Compile Include="Assets\Standard Assets\Scripts\General Scripts\DragRigidbody.js" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Camera\CameraControl.cs" />
-    <Compile Include="Assets\GameSettings.cs" />
-    <Compile Include="Assets\Managers\GameEvents\GameEventsManager.cs" />
-    <Compile Include="Assets\Managers\GameEvents\KeyboardEventHandler.cs" />
-    <Compile Include="Assets\Managers\GameEvents\MouseClickEventArgs.cs" />
-    <Compile Include="Assets\Managers\GameEvents\MouseClickEventHandler.cs" />
-    <Compile Include="Assets\Managers\GameEvents\MouseMoveEventHandler.cs" />
-    <Compile Include="Assets\Managers\IManager.cs" />
-    <Compile Include="Assets\Managers\Selection\SelectionManager.cs" />
-    <Compile Include="Assets\Space\Solar System\Planet\Scripts\Planet.cs" />
-    <Compile Include="Assets\Space\Solar System\Planet\Scripts\PlanetDetails.cs" />
-    <Compile Include="Assets\Space\Solar System\Scripts\SolarSystem.cs" />
-    <Compile Include="Assets\Space\Solar System\Scripts\SolarSystemObject.cs" />
-    <Compile Include="Assets\Space\Solar System\Sun\Scripts\Sun.cs" />
-    <Compile Include="Assets\Space\SpaceGrid.cs" />
-    <Compile Include="Assets\Space\SpaceScript.cs" />
-    <Compile Include="Assets\Vectrosity\VectrosityScripts\BrightnessControl.cs" />
-    <Compile Include="Assets\Vectrosity\VectrosityScripts\LineManager.cs" />
-    <Compile Include="Assets\Vectrosity\VectrosityScripts\RefInt.cs" />
-    <Compile Include="Assets\Vectrosity\VectrosityScripts\VectorChar.cs" />
-    <Compile Include="Assets\Vectrosity\VectrosityScripts\VectorLine.cs" />
-    <Compile Include="Assets\Vectrosity\VectrosityScripts\VectorManager.cs" />
-    <Compile Include="Assets\Vectrosity\VectrosityScripts\VisibilityControl.cs" />
-    <Compile Include="Assets\Vectrosity\VectrosityScripts\VisibilityControlAlways.cs" />
-    <Compile Include="Assets\Vectrosity\VectrosityScripts\VisibilityControlStatic.cs" />
+    <Folder Include="Assets" />
+    <Folder Include="Assets\Standard Assets" />
+    <Folder Include="Assets\Standard Assets\Scripts" />
+    <Folder Include="Assets\Standard Assets\Scripts\Camera Scripts" />
+    <Folder Include="Assets\Standard Assets\Scripts\General Scripts" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.UnityScript.targets" />
 </Project>

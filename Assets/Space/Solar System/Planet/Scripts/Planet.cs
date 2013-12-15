@@ -9,6 +9,7 @@ using Vectrosity;
 public class Planet : SolarSystemObject {
 	private const double Pi2 = Math.PI * 2.0;
 
+	public PlanetDetails Details;
 	public float RotationSpeed = 0.01f;
 	public Material TrajectorTrailMaterial;
 	public float TrajectoryTrailDetail = 0.1f;
@@ -18,23 +19,16 @@ public class Planet : SolarSystemObject {
 	private Vector3 rotationAxis = new Vector3(0f, 1f, 0f);
 	private float distanceFromSun;
 
-	// GUI
-	private TextMesh planetName;
-
 
 	public override void Awake() {
 		base.Awake();
-
-		var guiTextElements = this.GetComponentsInChildren<TextMesh>();
-		this.planetName = guiTextElements.FirstOrDefault(gte => gte.name == "PlanetName");
-
-		this.planetName.text = "Earth";
 	}
 
 	public override void Start() {
 		base.Start();
 
 		this.distanceFromSun = this.GetDistanceFrom(this.Sun);
+
 
 		// TODO call this on distanceFromSun change
 		// TODO Fix offset bug
@@ -50,10 +44,9 @@ public class Planet : SolarSystemObject {
 			this.rotationAxis,
 			this.RotationSpeed);
 
-		if (this.IsSelected)
-			this.trajectoryPath.Draw3D(this.transform);
-
-		this.planetName.transform.RotateAround(this.transform.position, new Vector3(0, 1, 0), 1f);
+		if (this.IsSelected) {
+			this.trajectoryPath.Draw3D(this.Sun.transform);
+		}
 	}
 
 	public void FillTrajectoryTrail() {
@@ -72,5 +65,14 @@ public class Planet : SolarSystemObject {
 			this.TrajectorTrailMaterial,
 			this.TrajectoryTrailSize, 
 			LineType.Continuous);
+	}
+
+	[Serializable]
+	public class PlanetDetails {
+		public string Name;
+		public char Type;
+		public int Population;
+		public float Speed;
+		public string Resources;
 	}
 }
