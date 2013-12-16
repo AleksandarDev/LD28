@@ -185,14 +185,15 @@ public class Sun : SolarSystemObject {
 	}
 
 	// Use this for initialization
-	void Start () {
+	public override void Start () {
 		//this.sunRenderer.material.SetTexture("Illumin", SunTextureHelper.GenerateSunSurface(1024, 768));
 		//this.sunRenderer.material.mainTexture = 
 		//	SunTextureHelper.GenerateSunSurface(1024, 768);
+		base.Start();
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+	public override void Update () {
+		base.Update();
 	}
 }

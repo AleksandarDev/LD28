@@ -7,6 +7,7 @@ namespace Assets.Managers.GameEvents {
 	public delegate void MouseScrollEventHandler(GameEventsManager sender);
 
 	public class GameEventsManager : MonoBehaviour, IManager {
+		public static GameEventsManager Instance;
 		public DebugOptions Debug = new DebugOptions();
 
 		// Mouse settings
@@ -55,6 +56,11 @@ namespace Assets.Managers.GameEvents {
 		private Vector3 mousePosition;
 		private Vector3 mousePositionPrevious;
 		private bool isMoving;
+
+
+		public GameEventsManager() {
+			GameEventsManager.Instance = this;
+		}
 
 
 		private void Awake() { }
@@ -205,6 +211,7 @@ namespace Assets.Managers.GameEvents {
 
 			public WatchedKey(KeyCode keyCode) {
 				this.KeyCode = keyCode;
+				this.Manager = GameEventsManager.Instance;
 			}
 
 

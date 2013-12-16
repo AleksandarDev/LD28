@@ -60,6 +60,8 @@
   <ItemGroup>
     <Compile Include="Assets\Camera\CameraControl.cs" />
     <Compile Include="Assets\Camera\CameraFacing.cs" />
+    <Compile Include="Assets\Camera\FastStars.cs" />
+    <Compile Include="Assets\Camera\SmoothFollow.cs" />
     <Compile Include="Assets\GameSettings.cs" />
     <Compile Include="Assets\Managers\GameEvents\GameEventsManager.cs" />
     <Compile Include="Assets\Managers\GameEvents\KeyboardEventHandler.cs" />
@@ -68,6 +70,9 @@
     <Compile Include="Assets\Managers\GameEvents\MouseMoveEventHandler.cs" />
     <Compile Include="Assets\Managers\IManager.cs" />
     <Compile Include="Assets\Managers\Selection\SelectionManager.cs" />
+    <Compile Include="Assets\Player\Scripts\EngineLight.cs" />
+    <Compile Include="Assets\Player\Scripts\EngineSmoke.cs" />
+    <Compile Include="Assets\Player\Scripts\Player.cs" />
     <Compile Include="Assets\Space\Solar System\Planet\Scripts\Planet.cs" />
     <Compile Include="Assets\Space\Solar System\Planet\Scripts\PlanetDetails.cs" />
     <Compile Include="Assets\Space\Solar System\Scripts\SolarSystem.cs" />

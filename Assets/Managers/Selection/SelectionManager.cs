@@ -56,7 +56,7 @@ namespace Assets.Managers.Selection {
 
 			if (didHit) {
 				// Get hit object and check if it's selectable
-				var selectedObject = hit.transform.gameObject.GetComponent<SelectableGameObject>();
+				var selectedObject = GetComponentFromAbove<SelectableGameObject>(hit.collider.gameObject);
 				if (selectedObject != null) {
 					if (this.Debug.SelectionMade)
 						UnityEngine.Debug.Log(
@@ -97,6 +97,13 @@ namespace Assets.Managers.Selection {
 		private bool GetRayHit(Vector3 position, out RaycastHit hit) {
 			var ray = Camera.main.ScreenPointToRay(position);
 			return Physics.Raycast(ray, out hit, Mathf.Infinity);
+		}
+
+		public static T GetComponentFromAbove<T>(GameObject behav) where T : Component {
+			var component = behav.GetComponent<T>();
+			if (component == null && behav.transform.parent != null)
+				return GetComponentFromAbove<T>(behav.transform.parent.gameObject);
+			else return component;
 		}
 
 

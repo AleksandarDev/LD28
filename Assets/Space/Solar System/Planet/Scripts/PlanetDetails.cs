@@ -29,13 +29,12 @@ public class PlanetDetails : MonoBehaviour {
 	}
 
 	public void Update() {
+		// Hide when not selected
 		if (this.planet.IsSelected) {
-			this.planetName.color = Color.black;
 			this.planetDetailsContent.SetActive(true);
 			this.planetDetailsBackground.SetActive(true);
 		}
 		else {
-			this.planetName.color = Color.white;
 			this.planetDetailsContent.SetActive(false);
 			this.planetDetailsBackground.SetActive(false);
 		}

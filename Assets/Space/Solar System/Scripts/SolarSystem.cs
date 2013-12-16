@@ -30,8 +30,6 @@ public class SolarSystem : MonoBehaviour {
 		foreach (var childObject in childGameObjects)
 			if (!(childObject is Sun))
 				this.Objects.Add(childObject);
-
-		// TODO Draw grid
 	}
 	
 	public void Update () {
