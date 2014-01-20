@@ -41,15 +41,15 @@ public class SolarSystem : MonoBehaviour {
 
 	private void FillTradeRoutes() {
 		var routePoints = new List<Vector3>();
-		for (int n = 0; n < this.Objects.Count; n++) {
-			var currentObject = this.Objects[n];
-			for (int index = n; index < this.Objects.Count; index++) {
-				if (currentObject.GetDistanceFrom(this.Objects[index]) < this.tradeRoutesMaxLength) {
-					routePoints.Add(currentObject.transform.position);
-					routePoints.Add(this.Objects[index].transform.position);
-				}
-			}
-		}
+		//for (int n = 0; n < this.Objects.Count; n++) {
+		//	var currentObject = this.Objects[n];
+		//	for (int index = n; index < this.Objects.Count; index++) {
+		//		if (currentObject.GetDistanceFrom(this.Objects[index]) < this.tradeRoutesMaxLength) {
+		//			routePoints.Add(currentObject.transform.position);
+		//			routePoints.Add(this.Objects[index].transform.position);
+		//		}
+		//	}
+		//}
 
 		// Instantiate trading route path
 		this.tradeRoutes = new VectorLine(

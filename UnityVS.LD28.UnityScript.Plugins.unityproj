@@ -52,7 +52,8 @@
     <Compile Include="Assets\Standard Assets\Scripts\Camera Scripts\SmoothFollow.js" />
     <Compile Include="Assets\Standard Assets\Scripts\Camera Scripts\SmoothLookAt.js" />
     <Compile Include="Assets\Standard Assets\Scripts\General Scripts\DragRigidbody.js" />
-    <None Include="Assets\Space\Solar System\Planet\Shaders\Planet.shader" />
+    <None Include="Assets\Space\Solar System\Planet\Shaders\PlanetShader.shader" />
+    <None Include="Assets\Space\Solar System\Sun\Shaders\SunShader.shader" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets" />
@@ -60,6 +61,8 @@
     <Folder Include="Assets\Space\Solar System" />
     <Folder Include="Assets\Space\Solar System\Planet" />
     <Folder Include="Assets\Space\Solar System\Planet\Shaders" />
+    <Folder Include="Assets\Space\Solar System\Sun" />
+    <Folder Include="Assets\Space\Solar System\Sun\Shaders" />
     <Folder Include="Assets\Standard Assets" />
     <Folder Include="Assets\Standard Assets\Scripts" />
     <Folder Include="Assets\Standard Assets\Scripts\Camera Scripts" />

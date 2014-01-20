@@ -10,17 +10,17 @@ using Vectrosity;
 public class LineManager : MonoBehaviour {
 	
 	static List<VectorLine> lines;
-	static List<Transform> transforms;
+	static List<Matrix4x4?> transforms;
 	static int lineCount = 0;
 	bool destroyed = false;
 
 	void Awake () {
 		lines = new List<VectorLine>();
-		transforms = new List<Transform>();
+		transforms = new List<Matrix4x4?>();
 		DontDestroyOnLoad(this);
 	}
 
-	public void AddLine (VectorLine vectorLine, Transform thisTransform, float time) {
+	public void AddLine (VectorLine vectorLine, Matrix4x4? thisTransform, float time) {
 		if (time > 0.0f) {	// Needs to be before the line check, to accommodate re-added lines
 			StartCoroutine (DisableLine (vectorLine, time, true));
 		}
@@ -30,7 +30,7 @@ public class LineManager : MonoBehaviour {
 			}
 		}
 		lines.Add (vectorLine);
-		transforms.Add (thisTransform);
+		transforms.Add(thisTransform);
 		
 		if (++lineCount == 1) {
 			enabled = true;

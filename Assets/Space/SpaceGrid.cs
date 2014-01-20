@@ -1,16 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Vectrosity;
 
+[Serializable]
 public class SpaceGrid {
 	public AvailableResolutions ActiveResolution;
+	public GameObject ReferenceObject;
 
 	private Dictionary<AvailableResolutions, Resolution> resolutions; 
 
 
 	public SpaceGrid(Material gridMaterial) {
 		Resolution.Material = gridMaterial;
+
 		this.resolutions = new Dictionary<AvailableResolutions, Resolution>();
 
 		this.GenerateResolutionGrids();
@@ -19,8 +23,8 @@ public class SpaceGrid {
 	}
 
 
-	public void Update() {
-		this.resolutions[this.ActiveResolution].Update();
+	public void Update(GameObject referenceObject) {
+		this.resolutions[this.ActiveResolution].Update(referenceObject);
 	}
 
 	private void GenerateResolutionGrids() {
@@ -29,6 +33,7 @@ public class SpaceGrid {
 		this.resolutions.Add(AvailableResolutions.SolarSystem, new Resolution(100, 100));
 	}
 
+	[Serializable]
 	public class Resolution {
 		public static Material Material;
 
@@ -42,18 +47,24 @@ public class SpaceGrid {
 		private Color colorFade = new Color(0, 0, 0, 0);
 		private float smoothLimit = 0.4f;
 
+		private Vector3 offset;
 
 		public Resolution(int size, float scale) {
 			this.Size = size;
 			this.Scale = scale;
 
+			this.offset = -new Vector3(size*scale, 0, size*scale) / 2;
+
 			this.FillGrid();
 		}
 
 
-		public void Update() {
-			this.HorizontalLines.Draw3DAuto();
-			this.VerticalLines.Draw3DAuto();
+		public void Update(GameObject transformObject) {
+			// Draw in offset (center-to-center of given object)
+			this.HorizontalLines.Draw3DAuto(transformObject.transform.localToWorldMatrix *
+											Matrix4x4.TRS(this.offset, Quaternion.identity, Vector3.one));
+			this.VerticalLines.Draw3DAuto(transformObject.transform.localToWorldMatrix *
+										  Matrix4x4.TRS(this.offset, Quaternion.identity, Vector3.one));
 		}
 
 

@@ -132,7 +132,7 @@ public class VectorManager {
 	// Same as above, but for VisibilityControl
 	static List<VectorLine> vectorLines2;
 	static List<RefInt> objectNumbers2;
-	static List<Transform> transforms;
+	static List<Matrix4x4?> transforms;
 	static int _arrayCount2 = 0;
 	public static int arrayCount2 {
 		get {return _arrayCount2;}
@@ -142,10 +142,10 @@ public class VectorManager {
 		if (vectorLines2 == null) {
 			vectorLines2 = new List<VectorLine>();
 			objectNumbers2 = new List<RefInt>();
-			transforms = new List<Transform>();
+			transforms = new List<Matrix4x4?>();
 		}
 		vectorLines2.Add(line);
-		transforms.Add(thisTransform);
+		transforms.Add(thisTransform.localToWorldMatrix);
 		objectNum = new RefInt(_arrayCount2++); 
 		objectNumbers2.Add(objectNum);
 		VectorLine.LineManagerEnable();

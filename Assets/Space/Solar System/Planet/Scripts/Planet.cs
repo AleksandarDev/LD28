@@ -48,7 +48,7 @@ public class Planet : SolarSystemObject {
 			this.OrbitalSpeed);
 
 		if (this.IsSelected) {
-			this.trajectoryPath.Draw3D(this.Sun.transform);
+			this.trajectoryPath.Draw3D(this.Sun.transform.localToWorldMatrix);
 		}
 	}
 

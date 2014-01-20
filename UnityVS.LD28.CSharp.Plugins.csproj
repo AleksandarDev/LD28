@@ -51,7 +51,8 @@
     <Compile Include="Assets\Standard Assets\Scripts\General Scripts\ActivateTrigger.cs" />
     <Compile Include="Assets\Standard Assets\Scripts\Utility Scripts\CombineChildren.cs" />
     <Compile Include="Assets\Standard Assets\Scripts\Utility Scripts\MeshCombineUtility.cs" />
-    <None Include="Assets\Space\Solar System\Planet\Shaders\Planet.shader" />
+    <None Include="Assets\Space\Solar System\Planet\Shaders\PlanetShader.shader" />
+    <None Include="Assets\Space\Solar System\Sun\Shaders\SunShader.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2013\UnityVS.CSharp.targets" />
 </Project>

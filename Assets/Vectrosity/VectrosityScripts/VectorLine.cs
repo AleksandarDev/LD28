@@ -1841,7 +1841,7 @@ public class VectorLine {
 		Draw (null);
 	}
 	
-	public void Draw (Transform thisTransform) {
+	public void Draw (Matrix4x4? thisTransform) {
 		if (error || !m_active) return;
 		if (!cam) {
 			SetCamera();
@@ -1864,8 +1864,8 @@ public class VectorLine {
 			return;
 		}
 	
-		var useTransformMatrix = (thisTransform == null)? false : true;
-		var thisMatrix = useTransformMatrix? thisTransform.localToWorldMatrix : Matrix4x4.identity;
+		var useTransformMatrix = (thisTransform != null);
+		var thisMatrix = useTransformMatrix? thisTransform : Matrix4x4.identity;
 		zDist = useOrthoCam? 101-m_depth : screenHeight/2 + ((100.0f - m_depth) * .0001f);
 		
 		int start, end = 0;
@@ -1891,42 +1891,9 @@ public class VectorLine {
 		}
 	}
 
-	private void Line2D (int start, int end, Matrix4x4 thisMatrix, bool useTransformMatrix) {
+	private void Line2D (int start, int end, Matrix4x4? thisMatrix, bool useTransformMatrix) {
 		Vector3 p1, p2;
-#if !UNITY_3
-		if (m_1pixelLine) {
-			if (m_continuous) {
-				int index = start*2;
-				for (int i = start; i < end; i++) {
-					if (useTransformMatrix) {
-						p1 = thisMatrix.MultiplyPoint3x4(points2[i]);
-						p2 = thisMatrix.MultiplyPoint3x4(points2[i+1]);
-					}
-					else {
-						p1 = points2[i];
-						p2 = points2[i+1];
-					}
-					p1.z = zDist; p2.z = zDist;
-					m_lineVertices[index  ] = p1;
-					m_lineVertices[index+1] = p2;
-					index += 2;
-				}
-			}
-			else {
-				for (int i = start; i <= end; i++) {
-					if (useTransformMatrix) {
-						p1 = thisMatrix.MultiplyPoint3x4(points2[i]);
-					}
-					else {
-						p1 = points2[i];
-					}
-					p1.z = zDist;
-					m_lineVertices[i] = p1;
-				}
-			}
-			return;
-		}
-#endif
+
 		int add, idx, widthIdx = 0;
 		widthIdxAdd = 0;
 		if (m_lineWidths.Length > 1) {
@@ -1947,8 +1914,8 @@ public class VectorLine {
 			var perpendicular = new Vector3(0.0f, 0.0f, 0.0f);
 			for (int i = start; i < end; i += add) {
 				if (useTransformMatrix) {
-					p1 = thisMatrix.MultiplyPoint3x4(points2[i]);
-					p2 = thisMatrix.MultiplyPoint3x4(points2[i+1]);
+					p1 = thisMatrix.Value.MultiplyPoint3x4(points2[i]);
+					p2 = thisMatrix.Value.MultiplyPoint3x4(points2[i+1]);
 				}
 				else {
 					p1 = points2[i];
@@ -1989,8 +1956,8 @@ public class VectorLine {
 			var thisLine = new Vector3(0.0f, 0.0f, 0.0f);
 			for (int i = m_minDrawIndex; i < end; i += add) {
 				if (useTransformMatrix) {
-					p1 = thisMatrix.MultiplyPoint3x4(points2[i]);
-					p2 = thisMatrix.MultiplyPoint3x4(points2[i+1]);
+					p1 = thisMatrix.Value.MultiplyPoint3x4(points2[i]);
+					p2 = thisMatrix.Value.MultiplyPoint3x4(points2[i+1]);
 				}
 				else {
 					p1 = points2[i];
@@ -2020,33 +1987,14 @@ public class VectorLine {
 		}
 	}
 
-	private void Line3DContinuous (int start, int end, Matrix4x4 thisMatrix, bool useTransformMatrix) {
+	private void Line3DContinuous (int start, int end, Matrix4x4? thisMatrix, bool useTransformMatrix) {
 		if (!cam3D) {
 			LogError ("The 3D camera no longer exists...if you have changed scenes, ensure that SetCamera3D is called in order to set it up.");
 			return;
 		}
-#if !UNITY_3
-		if (m_1pixelLine) {
-			Vector3 p1;
-			Vector3 p2 = useTransformMatrix? cam3D.WorldToScreenPoint(thisMatrix.MultiplyPoint3x4(points3[start])) :
-											 cam3D.WorldToScreenPoint(points3[start]);
-			p2.z = p2.z < cutoff? -zDist : zDist;
-			int index = start*2;
-			for (int i = start; i < end; i++) {
-				p1 = p2;
-				p2 = useTransformMatrix? cam3D.WorldToScreenPoint(thisMatrix.MultiplyPoint3x4(points3[i+1])) :
-										 cam3D.WorldToScreenPoint(points3[i+1]);
-				p2.z = p2.z < cutoff? -zDist : zDist;
-				
-				m_lineVertices[index  ] = p1;
-				m_lineVertices[index+1] = p2;
-				index += 2;
-			}
-			return;
-		}
-#endif
+
 		Vector3 pos1, perpendicular;
-		Vector3 pos2 = useTransformMatrix? cam3D.WorldToScreenPoint(thisMatrix.MultiplyPoint3x4(points3[start])) :
+		Vector3 pos2 = useTransformMatrix? cam3D.WorldToScreenPoint(thisMatrix.Value.MultiplyPoint3x4(points3[start])) :
 										   cam3D.WorldToScreenPoint(points3[start]);
 		pos2.z = pos2.z < cutoff? -zDist : zDist;
 		float normalizedDistance = 0.0f;
@@ -2060,7 +2008,7 @@ public class VectorLine {
 		
 		for (int i = start; i < end; i++) {
 			pos1 = pos2;
-			pos2 = useTransformMatrix? cam3D.WorldToScreenPoint(thisMatrix.MultiplyPoint3x4(points3[i+1])) :
+			pos2 = useTransformMatrix ? cam3D.WorldToScreenPoint(thisMatrix.Value.MultiplyPoint3x4(points3[i + 1])) :
 									   cam3D.WorldToScreenPoint(points3[i+1]);
 			if (pos1.x == pos2.x && pos1.y == pos2.y) {Skip (ref idx, ref widthIdx, ref pos1); continue;}
 			pos2.z = pos2.z < cutoff? -zDist : zDist;
@@ -2088,23 +2036,12 @@ public class VectorLine {
 		}
 	}
 
-	private void Line3DDiscrete (int start, int end, Matrix4x4 thisMatrix, bool useTransformMatrix) {
+	private void Line3DDiscrete (int start, int end, Matrix4x4? thisMatrix, bool useTransformMatrix) {
 		if (!cam3D) {
 			LogError ("The 3D camera no longer exists...if you have changed scenes, ensure that SetCamera3D is called in order to set it up.");
 			return;
 		}
-#if !UNITY_3
-		if (m_1pixelLine) {
-			Vector3 p1;
-			for (int i = start; i <= end; i++) {
-				p1 = useTransformMatrix? cam3D.WorldToScreenPoint(thisMatrix.MultiplyPoint3x4(points3[i])) :
-										 cam3D.WorldToScreenPoint(points3[i]);
-				p1.z = p1.z < cutoff? -zDist : zDist;
-				m_lineVertices[i] = p1;
-			}
-			return;
-		}
-#endif
+
 		Vector3 pos1, pos2, perpendicular;
 		float normalizedDistance = 0.0f;
 		int widthIdx = 0;
@@ -2117,8 +2054,8 @@ public class VectorLine {
 		
 		for (int i = start; i < end; i += 2) {
 			if (useTransformMatrix) {
-				pos1 = cam3D.WorldToScreenPoint(thisMatrix.MultiplyPoint3x4(points3[i]));
-				pos2 = cam3D.WorldToScreenPoint(thisMatrix.MultiplyPoint3x4(points3[i+1]));
+				pos1 = cam3D.WorldToScreenPoint(thisMatrix.Value.MultiplyPoint3x4(points3[i]));
+				pos2 = cam3D.WorldToScreenPoint(thisMatrix.Value.MultiplyPoint3x4(points3[i + 1]));
 			}
 			else {
 				pos1 = cam3D.WorldToScreenPoint(points3[i]);
@@ -2155,7 +2092,7 @@ public class VectorLine {
 		Draw3D (null);
 	}
 
-	public void Draw3D (Transform thisTransform) {
+	public void Draw3D (Matrix4x4? thisTransform) {
 		if (error || !m_active) return;
 		if (!cam3D) {
 			SetCamera3D();
@@ -2189,47 +2126,8 @@ public class VectorLine {
 		
 		int start, end, idx, add, widthIdx = 0;
 		SetupDrawStartEnd (out start, out end);
-		var useTransformMatrix = (thisTransform == null)? false : true;
-		var thisMatrix = useTransformMatrix? thisTransform.localToWorldMatrix : Matrix4x4.identity;
-		
-#if !UNITY_3
-		if (m_1pixelLine) {
-			if (m_continuous) {
-				int index = start*2;
-				if (useTransformMatrix) {
-					for (int i = start; i < end; i++) {
-						m_lineVertices[index  ] = thisMatrix.MultiplyPoint3x4(points3[i]);
-						m_lineVertices[index+1] = thisMatrix.MultiplyPoint3x4(points3[i+1]);
-						index += 2;
-					}
-				}
-				else {
-					for (int i = start; i < end; i++) {
-						m_lineVertices[index  ] = points3[i];
-						m_lineVertices[index+1] = points3[i+1];
-						index += 2;
-					}
-				}
-			}
-			else {
-				if (useTransformMatrix) {
-					for (int i = start; i <= end; i++) {
-						m_lineVertices[i] = thisMatrix.MultiplyPoint3x4(points3[i]);
-					}
-				}
-				else {
-					for (int i = start; i <= end; i++) {
-						m_lineVertices[i] = points3[i];
-					}
-				}
-			}
-			
-			if (!CheckLine()) return;
-			m_mesh.vertices = m_lineVertices;
-			m_mesh.RecalculateBounds();
-			return;
-		}
-#endif
+		var useTransformMatrix = (thisTransform != null);
+		var thisMatrix = useTransformMatrix? thisTransform : Matrix4x4.identity;
 		
 		widthIdxAdd = 0;
 		if (m_lineWidths.Length > 1) {
@@ -2249,8 +2147,8 @@ public class VectorLine {
 		
 		for (int i = start; i < end; i += add) {
 			if (useTransformMatrix) {
-				pos1 = cam3D.WorldToScreenPoint(thisMatrix.MultiplyPoint3x4(points3[i]));
-				pos2 = cam3D.WorldToScreenPoint(thisMatrix.MultiplyPoint3x4(points3[i+1]));
+				pos1 = cam3D.WorldToScreenPoint(thisMatrix.Value.MultiplyPoint3x4(points3[i]));
+				pos2 = cam3D.WorldToScreenPoint(thisMatrix.Value.MultiplyPoint3x4(points3[i+1]));
 			}
 			else {
 				pos1 = cam3D.WorldToScreenPoint(points3[i]);
@@ -2485,9 +2383,9 @@ public class VectorLine {
 		DrawPoints (null);
 	}
 	
-	private void DrawPoints (Transform thisTransform) {
-		var useTransformMatrix = (thisTransform == null)? false : true;
-		var thisMatrix = useTransformMatrix? thisTransform.localToWorldMatrix : Matrix4x4.identity;
+	private void DrawPoints (Matrix4x4? thisTransform) {
+		var useTransformMatrix = (thisTransform != null);
+		var thisMatrix = useTransformMatrix? thisTransform : Matrix4x4.identity;
 		zDist = useOrthoCam? 101-m_depth : screenHeight/2 + ((100.0f - m_depth) * .0001f);
 
 		int start, end, widthIdx = 0;
@@ -2497,7 +2395,7 @@ public class VectorLine {
 		if (m_1pixelLine) {
 			if (!m_is2D) {
 				for (int i = start; i <= end; i++) {
-					m_lineVertices[i] = useTransformMatrix? cam3D.WorldToScreenPoint(thisMatrix.MultiplyPoint3x4(points3[i])) :
+					m_lineVertices[i] = useTransformMatrix? cam3D.WorldToScreenPoint(thisMatrix.Value.MultiplyPoint3x4(points3[i])) :
 															cam3D.WorldToScreenPoint(points3[i]);
 					if (m_lineVertices[i].z < cutoff) {
 						m_lineVertices[i] = Vector3.zero;
@@ -2508,7 +2406,7 @@ public class VectorLine {
 			}
 			else {
 				for (int i = start; i <= end; i++) {
-					m_lineVertices[i] = useTransformMatrix? thisMatrix.MultiplyPoint3x4(points2[i]) : (Vector3)points2[i];
+					m_lineVertices[i] = useTransformMatrix? thisMatrix.Value.MultiplyPoint3x4(points2[i]) : (Vector3)points2[i];
 					m_lineVertices[i].z = zDist;
 				}
 			}
@@ -2531,7 +2429,7 @@ public class VectorLine {
 		
 		if (!m_is2D) {
 			for (int i = start; i <= end; i++) {
-				p1 = useTransformMatrix? cam3D.WorldToScreenPoint(thisMatrix.MultiplyPoint3x4(points3[i])) :
+				p1 = useTransformMatrix? cam3D.WorldToScreenPoint(thisMatrix.Value.MultiplyPoint3x4(points3[i])) :
 										 cam3D.WorldToScreenPoint(points3[i]);
 				if (p1.z < cutoff) {
 					Skip (ref idx, ref widthIdx, ref p1);
@@ -2551,7 +2449,7 @@ public class VectorLine {
 		}
 		else {
 			for (int i = start; i <= end; i++) {
-				p1 = useTransformMatrix? thisMatrix.MultiplyPoint3x4(points2[i]) : (Vector3)points2[i];
+				p1 = useTransformMatrix? thisMatrix.Value.MultiplyPoint3x4(points2[i]) : (Vector3)points2[i];
 				p1.z = zDist;
 				v1.x = v1.y = v2.y = m_lineWidths[widthIdx];
 				v2.x = -m_lineWidths[widthIdx];
@@ -2575,35 +2473,17 @@ public class VectorLine {
 		DrawPoints3D (null);
 	}
 
-	private void DrawPoints3D (Transform thisTransform) {
+	private void DrawPoints3D (Matrix4x4? thisTransform) {
 		if (layer == -1) {
 			vectorObject.layer = _vectorLayer3D;
 			layer = _vectorLayer3D;
 		}
-		var useTransformMatrix = (thisTransform == null)? false : true;
-		var thisMatrix = useTransformMatrix? thisTransform.localToWorldMatrix : Matrix4x4.identity;
+		var useTransformMatrix = (thisTransform != null);
+		var thisMatrix = useTransformMatrix? thisTransform : Matrix4x4.identity;
 		
 		int start, end, widthIdx = 0;
 		SetupDrawStartEnd (out start, out end);
-		
-#if !UNITY_3
-		if (m_1pixelLine) {
-			if (useTransformMatrix) {
-				for (int i = start; i <= end; i++) {
-					m_lineVertices[i] = thisMatrix.MultiplyPoint3x4(points3[i]);
-				}
-			}
-			else {
-				for (int i = start; i <= end; i++) {
-					m_lineVertices[i] = points3[i];
-				}
-			}
-			
-			m_mesh.vertices = m_lineVertices;
-			m_mesh.RecalculateBounds();
-			return;
-		}
-#endif
+
 		int idx = m_minDrawIndex*4;
 		widthIdxAdd = 0;
 		if (m_lineWidths.Length > 1) {
@@ -2612,7 +2492,7 @@ public class VectorLine {
 		}
 		Vector3 p1;
 		for (int i = start; i <= end; i++) {
-			p1 = useTransformMatrix? cam3D.WorldToScreenPoint(thisMatrix.MultiplyPoint3x4(points3[i])) :
+			p1 = useTransformMatrix? cam3D.WorldToScreenPoint(thisMatrix.Value.MultiplyPoint3x4(points3[i])) :
 									 cam3D.WorldToScreenPoint(points3[i]);
 			if (p1.z < cutoff) {
 				p1 = Vector3.zero;
@@ -2690,11 +2570,11 @@ public class VectorLine {
 		Draw3DAuto (time, null);
 	}
 
-	public void Draw3DAuto (Transform thisTransform) {
+	public void Draw3DAuto (Matrix4x4? thisTransform) {
 		Draw3DAuto (0.0f, thisTransform);
 	}
 	
-	public void Draw3DAuto (float time, Transform thisTransform) {
+	public void Draw3DAuto (float time, Matrix4x4? thisTransform) {
 #if !UNITY_3
 		if (m_1pixelLine) {
 			Debug.LogWarning ("VectorLine: When using a 1 pixel line and useMeshLines=true (or 1 pixel points and useMeshPoints=true), Draw3DAuto is unnecessary. Use Draw3D instead for optimal performance.");
